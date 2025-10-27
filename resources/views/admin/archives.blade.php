@@ -42,6 +42,7 @@
                                 <th class="px-4 py-3 font-medium text-left border border-gray-300">Product</th>
                                 <th class="px-4 py-3 font-medium text-left border border-gray-300">Description</th>
                                 <th class="px-4 py-3 font-medium text-left border border-gray-300">Price</th>
+                                <th class="px-4 py-3 font-medium text-left border border-gray-300">Image</th>
                                 <th class="px-4 py-3 font-medium text-left border border-gray-300">User</th>
                                 <th class="px-4 py-3 font-medium text-left border border-gray-300">Deleted_at</th>
                                 <th class="px-4 py-3 font-medium text-left border border-gray-300">Action</th>
@@ -54,6 +55,9 @@
                                 <td class="px-4 py-3 text-gray-700 border border-gray-200">{{ $product->name }}</td>
                                 <td class="px-4 py-3 text-gray-500 border border-gray-200">{{ $product->description }}</td>
                                 <td class="px-4 py-3 text-gray-700 font-semibold border border-gray-200">₱{{ number_format($product->price, 2) }}</td>
+                                <td class="px-4 py-3 text-gray-700 border border-gray-200">
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-16 h-16 object-cover rounded">
+                                </td>
                                 <td class="px-4 py-3 text-gray-600 border border-gray-200">{{ $product->user->name }}</td>
                                 <td class="px-4 py-3 text-gray-500 border border-gray-200">{{ $product->deleted_at->diffForHumans() }}</td>
                                 <td class="px-4 py-3 border border-gray-200">

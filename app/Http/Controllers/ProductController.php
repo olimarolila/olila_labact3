@@ -143,7 +143,17 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        Product::withTrashed()->find($id)->forceDelete();
+        $product = Product::withTrashed()->find($id);
+        if ($product) {
+            // attempt to delete the image file from public storage
+            if (!empty($product->image)) {
+                $imagePath = public_path($product->image);
+                if (is_file($imagePath)) {
+                    @unlink($imagePath);
+                }
+            }
+            $product->forceDelete();
+        }
         return redirect()->route('admin.products')->with('success', 'Product deleted permanently.');
     }
 }
