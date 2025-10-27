@@ -23,6 +23,9 @@
                             <x-nav-link href="{{ route('admin.orders') }}" :active="request()->routeIs('admin.orders')">
                                 {{ __('Orders') }}
                             </x-nav-link>
+                            <x-nav-link href="{{ route('admin.archives') }}" :active="request()->routeIs('admin.archives')">
+                                {{ __('Archives') }}
+                            </x-nav-link>
                         @else
                             <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                                 {{ __('Dashboard') }}

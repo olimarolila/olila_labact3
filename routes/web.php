@@ -30,6 +30,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'),'verified'])
         Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
         
         Route::get('/admin/products', [ProductController::class, 'products'])->name('admin.products');
+        // Archives page for trashed products
+        Route::get('/admin/archives', [ProductController::class, 'archives'])->name('admin.archives');
         Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
         Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.products.store');
         Route::get('/admin/products/edit/{id}', [ProductController::class, 'edit']);

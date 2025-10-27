@@ -11,7 +11,7 @@
             {{-- Products form --}}
             <section class="bg-white rounded-xl shadow-xl p-6">
                 <div>
-                    <form class="max-w-sm mx-auto" action="{{ url('/admin/products/update/'.$product->id) }}" method="POST">
+                    <form class="max-w-sm mx-auto" action="{{ url('/admin/products/update/'.$product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         {{-- Product Name --}}
@@ -61,6 +61,26 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        {{-- Image --}}
+                        <div class="mb-5">
+                            <label for="image" class="block mb-2 mt-2 text-sm font-medium">Image</label>
+                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-32 h-32 object-cover mb-2">
+                            <input 
+                                type="hidden" 
+                                value="{{ $product->image }}" 
+                                name="old_image"
+                            />
+                            <input 
+                                type="file" 
+                                name="image" 
+                                id="image" 
+                                value="{{ $product->image }}"
+                                class="text-sm p-2.5 w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a8dc3] focus:border-[#1a8dc3]" 
+                            />
+                            @error('image')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         
                         {{-- Submit --}}
                         <button 

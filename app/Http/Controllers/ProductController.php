@@ -18,9 +18,15 @@ class ProductController extends Controller
         
         //eloquent
         // $products = Product::all();
-        $products = Product::orderByDesc('id')->paginate(5, ['*'], 'products_page');
-        $trashed = Product::onlyTrashed()->orderByDesc('deleted_at')->paginate(5, ['*'], 'trashed_page');
+        $products = Product::orderByDesc('id')->paginate(5);
+        $trashed = Product::onlyTrashed()->orderByDesc('deleted_at')->paginate(5);
         return view('admin.products', compact('products','trashed'));
+    }
+
+    public function archives()
+    {
+        $trashed = Product::onlyTrashed()->with('user')->orderByDesc('deleted_at')->paginate(5);
+        return view('admin.archives', compact('trashed'));
     }
 
     public function create()
@@ -35,19 +41,32 @@ class ProductController extends Controller
             'name' => ['required','min:3','max:255'],
             'description' => ['required','min:10','max:255'],
             'price' => ['required','numeric','min:0'],
+            'image' => ['required','mimes:jpg,jpeg,png'],
         ],[
             'name.required' => 'Please input your product name',
             'name.min' => 'Product name must be at least 3 characters',
             'name.max' => 'Product name must not exceed 255 characters',
             'description.required' => 'Please input your product description',
             'price.required' => 'Please input your product price',
+            'image.required' => 'Please upload an image',
+            'image.mimes' => 'Image must be a file of type: jpg, jpeg, png.',
         ]);
 
+        // get the file
+        $image = $request->file('image');
+        //generate image filename
+        $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+        $upl_location='images/product/';
+        //storing the image in directory
+        $image->move($upl_location, $name_gen);
+        $last_image = $upl_location.$name_gen;
+       
         //insert into database using Eloquent
         Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'image' => $last_image,
             'user_id' => Auth::user()->id,
             'created_at' => Carbon::now(),
         ]);
@@ -86,11 +105,24 @@ class ProductController extends Controller
             'price.required' => 'Please input your product price',
         ]);
 
+        $old_img = $request->old_image;
+        // get the file
+        $image = $request->file('image');
+        //generate image filename
+        $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+        $upl_location='images/product/';
+        //storing the image in directory
+        $image->move($upl_location, $name_gen);
+        $last_image = $upl_location.$name_gen;
+
+        unlink($old_img);
+
         //update into database using Eloquent
         $product = Product::find($id)->update([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'image' => $last_image,
             'user_id' => Auth::user()->id,
         ]);
 
